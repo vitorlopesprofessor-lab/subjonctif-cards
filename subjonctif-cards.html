@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Le Subjonctif — Cartões</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F2F1EC;
+    --paper:#FFFFFF;
+    --ink:#242320;
+    --muted:#7A776E;
+    --line:#E1DFD6;
+    --accent:#3F5D58;
+    --accent-soft:#E7EDEB;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1040px;margin:0 auto;padding:64px 28px 96px;}
+  header{margin-bottom:56px;}
+  .kicker{color:var(--accent);font-size:0.85rem;letter-spacing:.02em;margin:0 0 10px;font-weight:500;}
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:clamp(2.1rem,4.5vw,3rem);
+    margin:0 0 14px;
+    line-height:1.08;
+  }
+  header p{color:var(--muted);max-width:46ch;line-height:1.55;margin:0;font-size:1rem;}
+
+  section.verb-group{margin-top:60px;}
+  .group-head{
+    display:flex;
+    align-items:baseline;
+    gap:16px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:14px;
+    margin-bottom:26px;
+  }
+  .group-head h2{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:500;
+    font-size:1.6rem;
+    margin:0;
+    color:var(--ink);
+  }
+  .group-head span{color:var(--muted);font-size:0.9rem;}
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(260px,1fr));
+    gap:16px;
+  }
+
+  .card{
+    perspective:1200px;
+    height:150px;
+    cursor:pointer;
+  }
+  .card-inner{
+    position:relative;
+    width:100%;height:100%;
+    transition:transform .5s cubic-bezier(.4,.2,.2,1);
+    transform-style:preserve-3d;
+  }
+  .card.flipped .card-inner{transform:rotateY(180deg);}
+  .face{
+    position:absolute;inset:0;
+    -webkit-backface-visibility:hidden;
+    backface-visibility:hidden;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:18px 20px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+  }
+  .card:hover .face{border-color:#C9C6BA;}
+  .face.back{
+    transform:rotateY(180deg);
+    background:var(--accent-soft);
+    border-color:#D3DEDB;
+  }
+  .num{
+    color:var(--muted);
+    font-size:0.78rem;
+    font-variant-numeric:tabular-nums;
+  }
+  .sentence{
+    font-size:1rem;
+    line-height:1.5;
+    margin-top:6px;
+  }
+  .blank{
+    display:inline-block;
+    min-width:2.6em;
+    border-bottom:1.5px solid var(--muted);
+    height:1em;
+    transform:translateY(3px);
+  }
+  .answer{
+    font-weight:600;
+    color:var(--accent);
+    font-style:normal;
+  }
+  .infinitive-tag{
+    align-self:flex-start;
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:0.82rem;
+    color:var(--accent);
+    background:var(--accent-soft);
+    border-radius:4px;
+    padding:3px 9px;
+  }
+  .back .infinitive-tag{background:var(--paper);}
+  .hint{
+    color:var(--muted);
+    font-size:0.72rem;
+    align-self:flex-end;
+  }
+
+  footer{
+    margin-top:72px;
+    color:var(--muted);
+    font-size:0.85rem;
+    border-top:1px solid var(--line);
+    padding-top:20px;
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#1C1B18;
+      --paper:#242320;
+      --ink:#EEECE4;
+      --muted:#9B978C;
+      --line:#38362F;
+      --accent:#8FB6AC;
+      --accent-soft:#28322F;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#1C1B18;--paper:#242320;--ink:#EEECE4;--muted:#9B978C;--line:#38362F;--accent:#8FB6AC;--accent-soft:#28322F;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="kicker">Grammaire française</p>
+    <h1>Le Subjonctif présent</h1>
+    <p>Clique sur un cartão para revelar a resposta. O verbo no infinitivo indica qual verbo conjugar na lacuna.</p>
+  </header>
+  <div id="content"></div>
+  <footer>70 phrases · 7 verbes irréguliers</footer>
+</div>
+
+<script>
+const data = [
+  ["être", [
+    ["Il faut que je sois plus patient.","sois"],
+    ["Il faut que tu sois à l’heure.","sois"],
+    ["Il faut qu’il soit prudent.","soit"],
+    ["Il faut qu’elle soit plus attentive.","soit"],
+    ["Il faut que nous soyons honnêtes.","soyons"],
+    ["Il faut que vous soyez prêts.","soyez"],
+    ["Il faut qu’ils soient sérieux.","soient"],
+    ["Il faut qu’elles soient ponctuelles.","soient"],
+    ["Il faut que je sois plus calme.","sois"],
+    ["Il faut que tu sois réaliste.","sois"],
+  ]],
+  ["avoir", [
+    ["Il faut que j’aie assez d’argent.","aie"],
+    ["Il faut que tu aies plus de temps.","aies"],
+    ["Il faut qu’il ait une bonne raison.","ait"],
+    ["Il faut qu’elle ait de la patience.","ait"],
+    ["Il faut que nous ayons toutes les informations.","ayons"],
+    ["Il faut que vous ayez confiance.","ayez"],
+    ["Il faut qu’ils aient de la chance.","aient"],
+    ["Il faut qu’elles aient une solution.","aient"],
+    ["Il faut que j’aie plus d’expérience.","aie"],
+    ["Il faut que tu aies les documents nécessaires.","aies"],
+  ]],
+  ["aller", [
+    ["Il faut que j’aille au travail demain.","aille"],
+    ["Il faut que tu ailles chez le médecin.","ailles"],
+    ["Il faut qu’il aille à la banque.","aille"],
+    ["Il faut qu’elle aille à Paris.","aille"],
+    ["Il faut que nous allions au supermarché.","allions"],
+    ["Il faut que vous alliez à la gare.","alliez"],
+    ["Il faut qu’ils aillent à l’hôpital.","aillent"],
+    ["Il faut qu’elles aillent en France.","aillent"],
+    ["Il faut que j’aille chez moi.","aille"],
+    ["Il faut que tu ailles au bureau.","ailles"],
+  ]],
+  ["faire", [
+    ["Il faut que je fasse attention.","fasse"],
+    ["Il faut que tu fasses quelque chose.","fasses"],
+    ["Il faut qu’il fasse ses devoirs.","fasse"],
+    ["Il faut qu’elle fasse un effort.","fasse"],
+    ["Il faut que nous fassions attention.","fassions"],
+    ["Il faut que vous fassiez une pause.","fassiez"],
+    ["Il faut qu’ils fassent leur travail.","fassent"],
+    ["Il faut qu’elles fassent une réservation.","fassent"],
+    ["Il faut que je fasse plus de sport.","fasse"],
+    ["Il faut que tu fasses attention à ce détail.","fasses"],
+  ]],
+  ["savoir", [
+    ["Il faut que je sache la vérité.","sache"],
+    ["Il faut que tu saches quoi faire.","saches"],
+    ["Il faut qu’il sache où elle habite.","sache"],
+    ["Il faut qu’elle sache comment ça fonctionne.","sache"],
+    ["Il faut que nous sachions exactement ce qui s’est passé.","sachions"],
+    ["Il faut que vous sachiez la réponse.","sachiez"],
+    ["Il faut qu’ils sachent parler français.","sachent"],
+    ["Il faut qu’elles sachent où aller.","sachent"],
+    ["Il faut que je sache tout avant de décider.","sache"],
+    ["Il faut que tu saches ce que tu veux.","saches"],
+  ]],
+  ["prendre", [
+    ["Il faut que je prenne une décision.","prenne"],
+    ["Il faut que tu prennes le train.","prennes"],
+    ["Il faut qu’il prenne son médicament.","prenne"],
+    ["Il faut qu’elle prenne un taxi.","prenne"],
+    ["Il faut que nous prenions le métro.","prenions"],
+    ["Il faut que vous preniez des notes.","preniez"],
+    ["Il faut qu’ils prennent le prochain vol.","prennent"],
+    ["Il faut qu’elles prennent une chambre.","prennent"],
+    ["Il faut que je prenne mon temps.","prenne"],
+    ["Il faut que tu prennes une photo.","prennes"],
+  ]],
+  ["boire", [
+    ["Il faut que je boive plus d’eau.","boive"],
+    ["Il faut que tu boives moins de café.","boives"],
+    ["Il faut qu’il boive beaucoup d’eau.","boive"],
+    ["Il faut qu’elle boive quelque chose.","boive"],
+    ["Il faut que nous buvions davantage d’eau.","buvions"],
+    ["Il faut que vous buviez moins d’alcool.","buviez"],
+    ["Il faut qu’ils boivent du café.","boivent"],
+    ["Il faut qu’elles boivent assez d’eau.","boivent"],
+    ["Il faut que je boive quelque chose avant de partir.","boive"],
+    ["Il faut que tu boives plus lentement.","boives"],
+  ]],
+];
+
+const root = document.getElementById('content');
+
+data.forEach(([infinitive, sentences])=>{
+  const section = document.createElement('section');
+  section.className = 'verb-group';
+
+  const head = document.createElement('div');
+  head.className = 'group-head';
+  head.innerHTML = `<h2>${infinitive}</h2><span>${sentences.length} phrases</span>`;
+  section.appendChild(head);
+
+  const grid = document.createElement('div');
+  grid.className = 'grid';
+
+  sentences.forEach(([sentence, verb], i)=>{
+    const blankSentence = sentence.replace(verb, '<span class="blank"></span>');
+    const answerSentence = sentence.replace(verb, `<span class="answer">${verb}</span>`);
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card-inner">
+        <div class="face front">
+          <span class="num">${String(i+1).padStart(2,'0')}</span>
+          <p class="sentence">${blankSentence}</p>
+          <span class="infinitive-tag">${infinitive}</span>
+        </div>
+        <div class="face back">
+          <span class="num">${String(i+1).padStart(2,'0')}</span>
+          <p class="sentence">${answerSentence}</p>
+          <span class="hint">virar</span>
+        </div>
+      </div>`;
+    card.addEventListener('click', ()=> card.classList.toggle('flipped'));
+    grid.appendChild(card);
+  });
+
+  section.appendChild(grid);
+  root.appendChild(section);
+});
+</script>
+</body>
+</html>
